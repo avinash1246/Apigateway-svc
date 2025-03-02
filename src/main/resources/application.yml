@@ -1,0 +1,81 @@
+server:
+  port: 9070
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:9080
+          predicates:
+            - Path=/users/**
+
+        - id: transaction-service
+          uri: http://localhost:9081
+          predicates:
+            - Path=/transactions/**
+
+        - id: customer-service
+          uri: http://localhost:9082
+          predicates:
+            - Path=/customers/**
+
+        - id: discovery-service
+          uri: http://localhost:8762
+          predicates:
+            - Path=/eureka/**
+  application:
+    name: apigateway-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8762/eureka/
+
+---
+server:
+  port: 9070
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:9080
+          predicates:
+            - Path=/users/**
+
+        - id: transaction-service
+          uri: http://localhost:9081
+          predicates:
+            - Path=/transactions/**
+
+        - id: customer-service
+          uri: http://localhost:9082
+          predicates:
+            - Path=/customers/**
+
+        - id: discovery-service
+          uri: http://localhost:8762
+          predicates:
+            - Path=/eureka/**
+  config:
+    activate:
+      on-profile:
+      - docker
+  application:
+    name: apigateway-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8762/eureka/
